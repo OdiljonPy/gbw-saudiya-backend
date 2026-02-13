@@ -1,0 +1,31 @@
+from ..models import Product
+from ..serializers import ProductSerializer
+from django.core.paginator import Paginator
+from django.db.models import Count
+
+
+
+
+def get_products_list(context:dict,page=1,size=20,category_id=None):
+    product_query = Product.objects.all()
+    if category_id:
+        product_query = product_query.filter(category_id=category_id)
+
+    total_count = product_query.aggregate(total_count=Count('id'))['total_count']
+    paginator = Paginator(product_query,size)
+    products = paginator.get_page(page)
+
+    response = {
+        'totalElements': total_count,
+        'totalPages': paginator.num_pages,
+        'size': size,
+        'number': page,
+        'numberOfElements': len(products),
+        'first': not products.has_previous(),
+        'last': not products.has_next(),
+        'empty': total_count == 0,
+        'content': ProductSerializer(products, many=True, context=context).data
+
+    }
+
+    return response
