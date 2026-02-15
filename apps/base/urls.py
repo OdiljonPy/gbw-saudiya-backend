@@ -3,7 +3,8 @@ from .views import (
     BannerViewSet,
     SponsorshipViewSet,
     MessageViewSet,
-    ProductViewSet
+    ProductViewSet,
+    CategoryViewSet
 )
 
 urlpatterns = [
@@ -22,5 +23,13 @@ urlpatterns = [
     path('base/products/<int:pk>/',
          ProductViewSet.as_view({'get': 'get_product_detail'}),
          name='get-product-detail'),
+    path('base/products/<int:pk>/recommendation/',
+         ProductViewSet.as_view({'get': 'get_product_recommendation'}),
+         name='get-product-recommendation'
+         ),
+    path('base/category/',
+         CategoryViewSet.as_view({'get': 'get_category_list'}),
+         name='get-category-list'
+         )
 
 ]

@@ -24,6 +24,8 @@ class Product(CreatedUpdatedAbstractModel):
    image = models.ImageField(upload_to="users/", blank=True, null=True)
    category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
    rate = models.IntegerField(blank=True, null=True)
+   is_available = models.BooleanField(default=False)
+
 
    def __str__(self):
        return str(self.name or f"Product {self.id}")
@@ -47,14 +49,6 @@ class Category(CreatedUpdatedAbstractModel):
    class Meta:
        ordering = ("-created_at",)
 
-
-class Cart(CreatedUpdatedAbstractModel):
-   product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-   quantity = models.IntegerField(blank=True, null=True)
-
-
-   class Meta:
-       ordering = ("-created_at",)
 
 
 class Sponsorship(CreatedUpdatedAbstractModel):

@@ -33,7 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id","name"]
+        fields = ["id","name","image"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

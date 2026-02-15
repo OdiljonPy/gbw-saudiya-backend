@@ -3,18 +3,22 @@ from rest_framework.viewsets import ViewSet
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.contrib.postgres.search import TrigramSimilarity
+
 
 from .models import (
     Banner,
     Sponsorship,
     Message,
     Product,
+    Category,
 )
 from .serializers import (
     BannerSerializer,
     SponsorshipSerializer,
     MessageSerializer,
     ProductSerializer,
+    CategorySerializer
 )
 from .repository.get_products import get_products_list
 
@@ -96,4 +100,40 @@ class ProductViewSet(ViewSet):
     def get_product_detail(self,request,pk=None):
         product = Product.objects.filter(id=pk).first()
         serializer = ProductSerializer(product,context={"request":request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        responses={200: ProductSerializer()},
+        tags=['Product'],
+        operation_description="Product recommendation",
+    )
+    def get_product_recommendation(self,request,pk=None):
+        main_product = Product.objects.filter(id=pk).first()
+        products = Product.objects.filter(category=main_product.category)[:4]
+        serializer = ProductSerializer(products,context={"request":request},many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+class CategoryViewSet(ViewSet):
+    @swagger_auto_schema(
+        responses={200: CategorySerializer()},
+        tags=['Category'],
+        operation_description="Category details",
+        manual_parameters=[
+            openapi.Parameter(
+                name = "search",
+                in_= openapi.IN_QUERY,
+                description = "Search",
+                type = openapi.TYPE_STRING,
+            )
+        ]
+    )
+    def get_category_list(self,request):
+        search = request.query_params.get("search",None)
+        category = Category.objects.all()
+        if search:
+            category = category.annotate(
+                similarity=TrigramSimilarity('name', search)
+            ).filter(similarity__gte=0.08)
+        serializer = CategorySerializer(category,many=True,context={"request":request})
         return Response(serializer.data,status=status.HTTP_200_OK)
