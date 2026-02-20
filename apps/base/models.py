@@ -9,6 +9,7 @@ class Banner(CreatedUpdatedAbstractModel):
    description = models.TextField(blank=True, null=True)
    first_image = models.ImageField(upload_to="banner/", blank=True, null=True)
    second_image= models.ImageField(upload_to="banner/", blank=True, null=True)
+   video = models.FileField(upload_to="banner/", blank=True, null=True)
 
    def __str__(self):
        return str(self.title or f"Banner {self.id}")

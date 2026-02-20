@@ -72,12 +72,31 @@ class StatisticsSerializer(serializers.ModelSerializer):
         model = Statistics
         fields = ["id","name","number"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        language = 'ru'
+        if request and request.META.get('HTTP_ACCEPT_LANGUAGE') in settings.MODELTRANSLATION_LANGUAGES:
+            language = request.META.get('HTTP_ACCEPT_LANGUAGE')
+        self.fields['name'] = serializers.CharField(source=f'name_{language}')
+
 
 class AboutUsSerializer(serializers.ModelSerializer):
     statistics = StatisticsSerializer(many=True,read_only=True)
     class Meta:
         model = AboutUs
         fields = ["id","name","subtitle","statistics","description","image","employer_image"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        language = 'ru'
+        if request and request.META.get('HTTP_ACCEPT_LANGUAGE') in settings.MODELTRANSLATION_LANGUAGES:
+            language = request.META.get('HTTP_ACCEPT_LANGUAGE')
+        self.fields['name'] = serializers.CharField(source=f'name_{language}')
+        self.fields['subtitle'] = serializers.CharField(source=f'subtitle_{language}')
+        self.fields['description'] = serializers.CharField(source=f'description_{language}')
+
 
 
 class OrderSerializer(serializers.ModelSerializer):
