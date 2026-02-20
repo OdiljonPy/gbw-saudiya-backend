@@ -4,7 +4,9 @@ from .views import (
     SponsorshipViewSet,
     MessageViewSet,
     ProductViewSet,
-    CategoryViewSet
+    CategoryViewSet,
+    AboutUsViewSet,
+    OrderViewSet
 )
 
 urlpatterns = [
@@ -30,6 +32,12 @@ urlpatterns = [
     path('base/category/',
          CategoryViewSet.as_view({'get': 'get_category_list'}),
          name='get-category-list'
-         )
+         ),
+    path('base/about_us/',
+         AboutUsViewSet.as_view({'get': 'get_about_us'}),
+         name='get-about-us'),
+    path('base/order/',
+         OrderViewSet.as_view({'post': 'create_order'}),
+         name='create-order'),
 
 ]

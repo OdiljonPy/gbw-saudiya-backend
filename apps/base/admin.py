@@ -4,7 +4,10 @@ from .models import (
     Sponsorship,
     Message,
     Product,
-    Category
+    Category,
+    AboutUs,
+    Statistics,
+    Order
 )
 
 @admin.register(Banner)
@@ -24,10 +27,25 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("id","name","price","image","category","rate")
+    list_display = ("id","name","price","category","rate")
     list_filter = ("id","name","price","category","rate")
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id","name","image")
+    list_display = ("id","name")
     list_filter = ("id","name")
+
+@admin.register(AboutUs)
+class AboutUsAdmin(admin.ModelAdmin):
+    list_display = ("id","name","subtitle","description")
+    list_filter = ("id","name")
+
+@admin.register(Statistics)
+class StatisticsAdmin(admin.ModelAdmin):
+    list_display = ("id","name","number")
+    list_filter = ("id","name","number")
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id","full_name","email","phone_number","address","description")
+    list_filter = ("id","full_name","email","phone_number","address",)

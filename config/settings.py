@@ -34,6 +34,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -166,4 +167,13 @@ SWAGGER_SETTINGS = {
         },
     ],
     'LOGIN_URL': 'api/v1/auth/login',
+}
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Mening Loyiham",
+    "site_header": "Admin Panel",
+    "welcome_sign": "Xush kelibsiz!",
+    "search_model": "auth.User",
+    "show_ui_builder": True,
 }
