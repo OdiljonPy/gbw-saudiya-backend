@@ -24,6 +24,8 @@ class Product(CreatedUpdatedAbstractModel):
    image = models.ImageField(upload_to="users/", blank=True, null=True)
    category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
    rate = models.IntegerField(blank=True, null=True)
+   is_available = models.BooleanField(default=False)
+
 
    def __str__(self):
        return str(self.name or f"Product {self.id}")
@@ -48,14 +50,6 @@ class Category(CreatedUpdatedAbstractModel):
        ordering = ("-created_at",)
 
 
-class Cart(CreatedUpdatedAbstractModel):
-   product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-   quantity = models.IntegerField(blank=True, null=True)
-
-
-   class Meta:
-       ordering = ("-created_at",)
-
 
 class Sponsorship(CreatedUpdatedAbstractModel):
    image = models.ImageField(upload_to="sponsorship/", blank=True, null=True)
@@ -77,13 +71,35 @@ class Message(CreatedUpdatedAbstractModel):
 
 
 
+class AboutUs(CreatedUpdatedAbstractModel):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    subtitle = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to="aboutus/", blank=True, null=True)
+    employer_image = models.ImageField(upload_to="aboutus/", blank=True, null=True)
+    statistics = models.ManyToManyField("Statistics", blank=True, null=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+class Statistics(CreatedUpdatedAbstractModel):
+   name = models.CharField(max_length=255, blank=True, null=True)
+   number = models.IntegerField(blank=True, null=True)
+
+   class Meta:
+       ordering = ("-created_at",)
 
 
+class Order(CreatedUpdatedAbstractModel):
+    product = models.ForeignKey("Product", on_delete=models.CASCADE, blank=True, null=True)
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
-
-
-
-
+    class Meta:
+        ordering = ("-created_at",)
 
 
 
