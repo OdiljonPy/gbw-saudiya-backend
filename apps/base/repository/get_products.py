@@ -4,9 +4,6 @@ from django.core.paginator import Paginator
 from django.db.models import Count
 from django.contrib.postgres.search import TrigramSimilarity
 
-
-
-
 def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,type=None):
     product_query = Product.objects.all()
     if category_id:
@@ -31,16 +28,9 @@ def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,t
     products = paginator.get_page(page)
 
     response = {
-        'totalElements': total_count,
-        'totalPages': paginator.num_pages,
-        'size': size,
-        'number': page,
-        'numberOfElements': len(products),
-        'first': not products.has_previous(),
-        'last': not products.has_next(),
-        'empty': total_count == 0,
-        'content': ProductSerializer(products, many=True, context=context).data
-
+        'count': total_count,
+        'previous': products.has_previous(),
+        'next': products.has_next(),
+        'result': ProductSerializer(products,many=True,context=context).data
     }
-
     return response
