@@ -5,7 +5,7 @@ from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Count
 
 def get_categories_list(context:dict,page=1,size=20,search=None):
-    category_query = Category.objects.all()
+    category_query = Category.objects.all().order_by('id')
     if search:
         category_query = category_query.annotate(
             similarity=TrigramSimilarity('name', search)
@@ -15,12 +15,11 @@ def get_categories_list(context:dict,page=1,size=20,search=None):
     paginator = Paginator(category_query,size)
     categories = paginator.get_page(page)
 
-    response = {
-        'count': total_count,
-        'previous': not categories.has_previous(),
-        'next': not categories.has_next(),
-        'result': CategorySerializer(categories, many=True, context=context).data
-
+    response ={
+        'count':total_count,
+        'previous':categories.has_previous(),
+        'next':categories.has_next(),
+        'result':CategorySerializer(categories,many=True,context=context).data
     }
-
     return response
+
