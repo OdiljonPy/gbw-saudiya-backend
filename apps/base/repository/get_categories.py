@@ -16,7 +16,7 @@ def get_categories_list(context:dict,page=1,size=20,search=None):
     categories = paginator.get_page(page)
 
     response = {
-        'count': paginator.num_pages,
+        'count': total_count,
         'previous': not categories.has_previous(),
         'next': not categories.has_next(),
         'result': CategorySerializer(categories, many=True, context=context).data
