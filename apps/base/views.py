@@ -32,19 +32,6 @@ class BannerViewSet(ViewSet):
         operation_description="Banner details"
     )
     def get_banner(self,request):
-        language = request.headers.get("Accept-Language","ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
-
-
         banner = Banner.objects.all()
         serializer = BannerSerializer(banner, many=True,context={"request":request})
         return Response(serializer.data,status=status.HTTP_200_OK)
@@ -115,17 +102,6 @@ class ProductViewSet(ViewSet):
         ],
     )
     def get_products_by_category(self,request):
-        language = request.headers.get("Accept-Language", "ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
         page = request.query_params.get("page",1)
         size = request.query_params.get("size",20)
         category_id = request.query_params.get("category_id",None)
@@ -146,17 +122,6 @@ class ProductViewSet(ViewSet):
         operation_description="Product detail",
     )
     def get_product_detail(self,request,pk=None):
-        language = request.headers.get("Accept-Language", "ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
         product = Product.objects.filter(id=pk).first()
         if not product:
             return Response({"message":"Product not found"},status=status.HTTP_404_NOT_FOUND)
@@ -169,17 +134,6 @@ class ProductViewSet(ViewSet):
         operation_description="Product recommendation",
     )
     def get_product_recommendation(self,request,pk=None):
-        language = request.headers.get("Accept-Language", "ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
         main_product = Product.objects.filter(id=pk).first()
         if not main_product:
             return Response({"message":"Product not found"},status=status.HTTP_404_NOT_FOUND)
@@ -203,17 +157,6 @@ class CategoryViewSet(ViewSet):
         ]
     )
     def get_category_list(self,request):
-        language = request.headers.get("Accept-Language", "ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
         search = request.query_params.get("search",None)
         category = Category.objects.all()
         if search:
@@ -231,17 +174,6 @@ class AboutUsViewSet(ViewSet):
         operation_description="About Us",
     )
     def get_about_us(self,request):
-        language = request.headers.get("Accept-Language", "ru")
-        if language.startswith("uz"):
-            activate("uz")
-        elif language.startswith("en"):
-            activate("en")
-        elif language.startswith("ru"):
-            activate("ru")
-        elif language.startswith("ar"):
-            activate("ar")
-        else:
-            activate("ru")
         about_us = AboutUs.objects.all()
         serializer = AboutUsSerializer(about_us,context={"request":request},many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
