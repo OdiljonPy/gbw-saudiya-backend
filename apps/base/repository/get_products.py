@@ -29,6 +29,7 @@ def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,t
 
     response = {
         'count': total_count,
+        'total_pages': paginator.num_pages,
         'previous': products.has_previous(),
         'next': products.has_next(),
         'result': ProductSerializer(products,many=True,context=context).data
