@@ -17,6 +17,7 @@ def get_categories_list(context:dict,page=1,size=20,search=None):
 
     response ={
         'count':total_count,
+        'total_pages':paginator.num_pages,
         'previous':categories.has_previous(),
         'next':categories.has_next(),
         'result':CategorySerializer(categories,many=True,context=context).data
