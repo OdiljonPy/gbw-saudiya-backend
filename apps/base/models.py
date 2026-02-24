@@ -1,6 +1,6 @@
 from django.db import models
 from apps.abstract.base_model import CreatedUpdatedAbstractModel
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
@@ -25,7 +25,7 @@ class Product(CreatedUpdatedAbstractModel):
    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
    image = models.ImageField(upload_to="users/", blank=True, null=True)
    category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
-   rate = models.IntegerField(blank=True, null=True)
+   rate = models.IntegerField(blank=True, null=True,validators=[MinValueValidator(1),MaxValueValidator(5)])
    is_available = models.BooleanField(default=False)
 
 
