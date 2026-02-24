@@ -30,6 +30,10 @@ urlpatterns = [
          CategoryViewSet.as_view({'get': 'get_category_list'}),
          name='get-category-list'
          ),
+    path('base/category/<int:pk>/',
+         CategoryViewSet.as_view({'get': 'get_category_detail'}),
+         name='get-category-detail'),
+
     path('base/about_us/',
          AboutUsViewSet.as_view({'get': 'get_about_us'}),
          name='get-about-us'),

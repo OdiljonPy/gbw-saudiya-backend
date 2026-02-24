@@ -21,7 +21,8 @@ from .serializers import (
     ProductSerializer,
     CategorySerializer,
     AboutUsSerializer,
-    OrderSerializer
+    OrderSerializer,
+    CategoryDetailSerializer
 )
 from .repository.get_products import get_products_list
 from .repository.get_categories import get_categories_list
@@ -177,7 +178,17 @@ class CategoryViewSet(ViewSet):
                                          search=search)
         return Response(categories,status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(
+        responses={200: CategoryDetailSerializer()},
+        tags=['Category'],
+        operation_description="Category details",
+    )
+    def get_category_detail(self,request,pk=None):
+        category = Category.objects.filter(id=pk).first()
+        if not category:
+            return Response({"message":"Category not found"},status=status.HTTP_404_NOT_FOUND)
+        serializer = CategoryDetailSerializer(category,context={"request":request})
+        return Response({'result':serializer.data},status=status.HTTP_200_OK)
 
 class AboutUsViewSet(ViewSet):
     @swagger_auto_schema(
