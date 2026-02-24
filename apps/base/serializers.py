@@ -22,7 +22,7 @@ class BannerSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ["id","name","price","image","category","rate","is_available"]
+        fields = ["id","name","price","image","category","rate","is_available","description"]
 
 
 
@@ -31,6 +31,9 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ["id","name","image"]
 
+class CategoryDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
 
 
 class SponsorshipSerializer(serializers.ModelSerializer):
