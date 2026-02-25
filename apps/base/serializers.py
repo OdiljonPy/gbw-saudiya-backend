@@ -8,6 +8,7 @@ from .models import (
     AboutUs,
     Statistics,
     Order,
+    OrderItem,
 )
 from django.conf import settings
 
@@ -63,10 +64,38 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 
 
+class OrderItemSerializer(serializers.Serializer):
+   product=serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+   quantity=serializers.IntegerField()
+
 
 class OrderSerializer(serializers.ModelSerializer):
-    product_id = serializers.IntegerField()
-    class Meta:
-        model = Order
-        fields = ["id","full_name","email","phone_number","address","description","product_id"]
+   items = OrderItemSerializer(many=True)
+
+
+   class Meta:
+       model = Order
+       fields = ['id', 'full_name', 'email', 'phone_number', 'address', 'description', 'items']
+       read_only_fields = ['total_price']
+
+   def create(self, validated_data):
+       items_data = validated_data.pop('items')
+
+       total = 0
+       for item_data in items_data:
+           product = item_data['product']
+           quantity = item_data['quantity']
+           total += (product.price or 0) * quantity
+
+
+       order = Order.objects.create(total_price=total, **validated_data)
+       for item_data in items_data:
+           OrderItem.objects.create(order=order, **item_data)
+
+       return order
+
+
+
+
+
 

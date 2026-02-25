@@ -92,16 +92,50 @@ class Statistics(CreatedUpdatedAbstractModel):
        ordering = ("-created_at",)
 
 
-class Order(CreatedUpdatedAbstractModel):
-    product = models.ForeignKey("Product", on_delete=models.CASCADE, blank=True, null=True)
-    full_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(max_length=255, blank=True, null=True)
-    phone_number = models.CharField(max_length=255, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
 
-    class Meta:
-        ordering = ("-created_at",)
+
+class Order(CreatedUpdatedAbstractModel):
+   full_name = models.CharField(max_length=255, blank=True, null=True)
+   email = models.EmailField(max_length=255, blank=True, null=True)
+   phone_number = models.CharField(max_length=255, blank=True, null=True)
+   address = models.CharField(max_length=255, blank=True, null=True)
+   description = models.TextField(blank=True, null=True)
+   total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+
+
+   class Meta:
+       ordering = ("-created_at",)
+
+
+
+
+class OrderItem(CreatedUpdatedAbstractModel):
+   order = models.ForeignKey("Order", on_delete=models.CASCADE, blank=True, null=True,related_name="items")
+   product = models.ForeignKey("Product", on_delete=models.SET_NULL, blank=True, null=True)
+   quantity = models.PositiveIntegerField(blank=True, null=True)
+
+
+   def __str__(self):
+       return f"{self.quantity} x {self.product.name if self.product else 'Deleted Product'}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
