@@ -9,7 +9,7 @@ from .models import (
 )
 
 class ProductTranslationOptions(TranslationOptions):
-    fields = ('name', )
+    fields = ('name','description' )
 
 translator.register(Product,ProductTranslationOptions)
 
