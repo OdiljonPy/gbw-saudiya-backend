@@ -7,7 +7,8 @@ from .models import (
     Category,
     AboutUs,
     Statistics,
-    Order
+    Order,
+    OrderItem,
 )
 
 @admin.register(Banner)
@@ -57,3 +58,9 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ("id","full_name","email","phone_number","address","description")
     list_filter = ("id","full_name","email","phone_number","address",)
     search_fields = ("id","full_name","email","phone_number","address","description")
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ("id","order","product","quantity")
+    list_filter = ("id","order","product","quantity")
+    search_fields = ("id","order","product","quantity")

@@ -209,10 +209,7 @@ class OrderViewSet(ViewSet):
         operation_description="Order details",
     )
     def create_order(self,request):
-        product = Product.objects.filter(id=request.data["product_id"]).first()
-        if not product:
-            return Response({"message":"Product not found"},status=status.HTTP_404_NOT_FOUND)
         serializer = OrderSerializer(data=request.data,context={"request":request})
         serializer.is_valid(raise_exception=True)
-        serializer.save(product=product)
+        serializer.save()
         return Response(serializer.data,status=status.HTTP_200_OK)
