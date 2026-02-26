@@ -21,9 +21,10 @@ class BannerSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source="category.name",read_only=True)
     class Meta:
         model = Product
-        fields = ["id","name","price","image","category","rate","is_available","description"]
+        fields = ["id","name","price","image","category","category_name","rate","is_available","description"]
 
 
 
