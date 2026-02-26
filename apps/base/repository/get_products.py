@@ -1,7 +1,7 @@
 from ..models import Product
 from ..serializers import ProductSerializer
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count,Q
 from django.contrib.postgres.search import TrigramSimilarity
 
 def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,type=None):
@@ -11,8 +11,16 @@ def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,t
 
     if search:
         product_query = product_query.annotate(
-            similarity=TrigramSimilarity('name', search)
-        ).filter(similarity__gte=0.08)
+            sim_uz=TrigramSimilarity('name_uz', search),
+            sim_ru=TrigramSimilarity('name_ru', search),
+            sim_en=TrigramSimilarity('name_en', search),
+            sim_ar=TrigramSimilarity('name_ar', search),
+        ).filter(
+            Q(sim_uz__gte=0.1) |
+            Q(sim_ru__gte=0.1) |
+            Q(sim_en__gte=0.1) |
+            Q(sim_ar__gte=0.1)
+        )
 
     if type == 'new':
         product_query = product_query.order_by('-created_at')
