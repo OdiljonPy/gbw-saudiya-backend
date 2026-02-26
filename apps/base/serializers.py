@@ -19,18 +19,20 @@ class BannerSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "description", "first_image","second_image","video"]
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id","name","image"]
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True)
     class Meta:
         model = Product
         fields = ["id","name","price","image","category","rate","is_available","description"]
 
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ["id","name","image"]
+
 
 class CategoryDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
