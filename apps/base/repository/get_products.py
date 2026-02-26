@@ -2,10 +2,8 @@ from ..models import Product
 from ..serializers import ProductSerializer
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.utils.translation import get_language
 from django.contrib.postgres.search import TrigramSimilarity
-
-
-
 
 def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,type=None):
     product_query = Product.objects.all()
@@ -13,9 +11,11 @@ def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,t
         product_query = product_query.filter(category_id=category_id)
 
     if search:
+        lang = get_language()
+        search_field = f"name_{lang}"
         product_query = product_query.annotate(
-            similarity=TrigramSimilarity('name', search)
-        ).filter(similarity__gte=0.08)
+            similarity=TrigramSimilarity(search_field, search)
+        ).filter(similarity__gte=0.1)
 
     if type == 'new':
         product_query = product_query.order_by('-created_at')
@@ -31,16 +31,10 @@ def get_products_list(context:dict,page=1,size=20,category_id=None,search=None,t
     products = paginator.get_page(page)
 
     response = {
-        'totalElements': total_count,
-        'totalPages': paginator.num_pages,
-        'size': size,
-        'number': page,
-        'numberOfElements': len(products),
-        'first': not products.has_previous(),
-        'last': not products.has_next(),
-        'empty': total_count == 0,
-        'content': ProductSerializer(products, many=True, context=context).data
-
+        'count': total_count,
+        'total_pages': paginator.num_pages,
+        'previous': products.has_previous(),
+        'next': products.has_next(),
+        'result': ProductSerializer(products,many=True,context=context).data
     }
-
     return response

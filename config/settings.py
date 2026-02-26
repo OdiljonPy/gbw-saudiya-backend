@@ -48,12 +48,16 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework_simplejwt',
     'modeltranslation',
+    'corsheaders',
+
 
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -76,6 +80,14 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    'x-api-key',
+    'content-type',
+    'Authorization'
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"

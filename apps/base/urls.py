@@ -22,9 +22,6 @@ urlpatterns = [
     path('base/products/category/',
          ProductViewSet.as_view({'get': 'get_products_by_category'}),
          name='get-products-by-category'),
-    path('base/products/<int:pk>/',
-         ProductViewSet.as_view({'get': 'get_product_detail'}),
-         name='get-product-detail'),
     path('base/products/<int:pk>/recommendation/',
          ProductViewSet.as_view({'get': 'get_product_recommendation'}),
          name='get-product-recommendation'
@@ -33,6 +30,10 @@ urlpatterns = [
          CategoryViewSet.as_view({'get': 'get_category_list'}),
          name='get-category-list'
          ),
+    path('base/category/<int:pk>/',
+         CategoryViewSet.as_view({'get': 'get_category_detail'}),
+         name='get-category-detail'),
+
     path('base/about_us/',
          AboutUsViewSet.as_view({'get': 'get_about_us'}),
          name='get-about-us'),
